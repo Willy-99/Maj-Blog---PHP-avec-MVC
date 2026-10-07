@@ -5,6 +5,11 @@
      */
 ?>
 
+<nav class="adminMenu">
+    <a href="index.php?action=admin">Articles</a>
+    <a href="index.php?action=monitoring">Monitoring</a>
+</nav>
+
 <h2>Edition des articles</h2>
 
 <div class="adminArticle">

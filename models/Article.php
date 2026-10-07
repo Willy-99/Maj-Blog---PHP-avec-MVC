@@ -10,7 +10,9 @@
     private string $title = "";
     private string $content = "";
     private ?DateTime $dateCreation = null;
-    private ?DateTime $dateUpdate = null;  
+    private ?DateTime $dateUpdate = null;
+
+    private int $nombreVues = 0; // Le nombre de vues de l'article. Par défaut, c'est 0.
 
     /**
      * Setter pour l'id de l'utilisateur. 
@@ -56,7 +58,6 @@
     {
         $this->content = $content;
     }
-
     
     /**
      * Getter pour le contenu.
@@ -126,5 +127,23 @@
     public function getDateUpdate() : ?DateTime 
     {
         return $this->dateUpdate;
+    }
+
+    /**
+     * Getter pour le nombre de vues.
+     * @return int
+     */
+    public function getNombreVues() : int
+    {
+        return $this->nombreVues;
+    }
+
+    /**
+     * Setter pour le nombre de vues.
+     * @param int $nombreVues
+     */
+    public function setNombreVues(int $nombreVues) : void
+    {
+        $this->nombreVues = $nombreVues;
     }
  }

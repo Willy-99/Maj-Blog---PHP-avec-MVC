@@ -92,4 +92,20 @@ class ArticleManager extends AbstractEntityManager
         $sql = "DELETE FROM article WHERE id = :id";
         $this->db->query($sql, ['id' => $id]);
     }
+
+    /**
+     * Récupère les articles pour le monitoring.
+     * @return array : un tableau d'objets Article.
+     */
+    public function getArticlesForMonitoring() : array
+    {
+        $sql = "SELECT * FROM article";
+        $result = $this->db->query($sql);
+        $articles = [];
+
+        while ($article = $result->fetch()) {
+            $articles[] = new Article($article);
+        }
+        return $articles;
+    }
 }
