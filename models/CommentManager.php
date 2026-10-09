@@ -39,6 +39,26 @@ class CommentManager extends AbstractEntityManager
     }
 
     /**
+     * Compte les commentaires associés à un article.
+     * @param int $idArticle : l'identifiant de l'article.
+     * @return int : le nombre de commentaires.
+     */
+    public function getCommentCountByArticleId(int $idArticle): int
+    {
+        $sql = "SELECT COUNT(*) AS nombre_commentaires
+                FROM comment
+                WHERE id_article = :idArticle";
+
+        $result = $this->db->query($sql, [
+            'idArticle' => $idArticle
+        ]);
+
+        $data = $result->fetch();
+
+        return (int) $data['nombre_commentaires'];
+    }
+
+    /**
      * Ajoute un commentaire.
      * @param Comment $comment : l'objet Comment à ajouter.
      * @return bool : true si l'ajout a réussi, false sinon.
@@ -64,6 +84,26 @@ class CommentManager extends AbstractEntityManager
         $sql = "DELETE FROM comment WHERE id = :id";
         $result = $this->db->query($sql, ['id' => $comment->getId()]);
         return $result->rowCount() > 0;
+    }
+
+    /**
+     * Récupère le nombre de commentaires pour chaque article.
+     * @return array : un tableau associant chaque id d'article à son nombre de commentaires.
+     */
+    public function getCommentCountsByArticle(): array
+    {
+        $sql = "SELECT id_article, COUNT(*) AS nombre_commentaires
+                FROM comment
+                GROUP BY id_article";
+
+        $result = $this->db->query($sql);
+        $commentCounts = [];
+
+        while ($row = $result->fetch()) {
+            $commentCounts[(int) $row['id_article']] = (int) $row['nombre_commentaires'];
+        }
+
+        return $commentCounts;
     }
 
 }

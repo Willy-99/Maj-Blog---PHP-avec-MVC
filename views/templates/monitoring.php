@@ -20,6 +20,12 @@
                     <?= $sort === 'views' ? ($order === 'asc' ? '↑' : '↓') : '' ?>
                 </a>
             </th>
+            <th>
+                <a href="index.php?action=monitoring&sort=comments&order=<?= $sort === 'comments' && $order === 'asc' ? 'desc' : 'asc' ?>">
+                    Nombre de Commentaires
+                    <?= $sort === 'comments' ? ($order === 'asc' ? '↑' : '↓') : '' ?>
+                </a>
+            </th>
         </tr>
     </thead>
 
@@ -29,6 +35,7 @@
                 <td><?= $article->getTitle() ?></td>
                 <td><?= Utils::convertDateToFrenchFormat($article->getDateCreation()) ?></td>
                 <td><?= $article->getNombreVues() ?></td>
+                <td><?= $article->getNombreCommentaires() ?></td>
             </tr>
         <?php } ?>
     </tbody>

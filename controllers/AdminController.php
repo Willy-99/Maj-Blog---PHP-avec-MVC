@@ -208,12 +208,25 @@ class AdminController {
         $articleManager = new ArticleManager();
         $articles = $articleManager->getArticlesForMonitoring();
 
+        // On récupère le nombre de commentaires par article.
+        $commentManager = new CommentManager();
+        $commentCounts = $commentManager->getCommentCountsByArticle();
+
+        // On associe le nombre de commentaires à chaque article.
+        foreach ($articles as $article) {
+            $idArticle = $article->getId();
+
+            $nombreCommentaires = $commentCounts[$idArticle] ?? 0;
+
+            $article->setNombreCommentaires($nombreCommentaires);
+        }
+
         // On récupère la colonne et le sens du tri.
         $sort = $_GET['sort'] ?? 'title';
         $order = $_GET['order'] ?? 'asc';
 
         // On définit les valeurs autorisées.
-        $allowedSorts = ['title', 'date', 'views'];
+        $allowedSorts = ['title', 'date', 'views', 'comments'];
         $allowedOrders = ['asc', 'desc'];
 
         // On vérifie les paramètres reçus.
@@ -232,6 +245,8 @@ class AdminController {
                 $result = $a->getDateCreation() <=> $b->getDateCreation();
             } elseif ($sort === 'views') {
                 $result = $a->getNombreVues() <=> $b->getNombreVues();
+            } elseif ($sort === 'comments') {
+                $result = $a->getNombreCommentaires() <=> $b->getNombreCommentaires();
             }
 
             return $order === 'asc' ? $result : -$result;

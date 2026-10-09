@@ -11,6 +11,8 @@
     private string $content = "";
     private ?DateTime $dateCreation = null;
     private ?DateTime $dateUpdate = null;
+    private int $nombreCommentaires = 0;
+
 
     private int $nombreVues = 0; // Le nombre de vues de l'article. Par défaut, c'est 0.
 
@@ -146,4 +148,23 @@
     {
         $this->nombreVues = $nombreVues;
     }
+
+    /**
+     * Getter pour le nombre de commentaires.
+     * @return int
+     */
+    public function getNombreCommentaires() : int
+    {
+        return $this->nombreCommentaires;
+    }
+
+    /**
+     * Setter pour le nombre de commentaires.
+     * @param int $nombreCommentaires
+     */
+    public function setNombreCommentaires(int $nombreCommentaires) : void
+    {
+        $this->nombreCommentaires = $nombreCommentaires;
+    }
+    
  }
