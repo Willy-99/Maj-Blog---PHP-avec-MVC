@@ -158,6 +158,24 @@ class AdminController {
         Utils::redirect("admin");
     }
 
+    public function showComments() : void 
+    {
+        $this->checkIfUserIsConnected();
+
+        // On récupère l'id de l'article.
+        $idArticle = Utils::request("id", -1);
+
+        // On récupère les commentaires associés à l'article.
+        $commentManager = new CommentManager();
+        $comments = $commentManager->getAllCommentsByArticleId($idArticle);
+
+        // On affiche la page de gestion des commentaires.
+        $view = new View("Gestion des commentaires");
+        $view->render("showComments", [
+            'comments' => $comments,
+            'idArticle' => $idArticle
+        ]);
+    }
 
     /**
      * Suppression d'un article.
@@ -190,10 +208,42 @@ class AdminController {
         $articleManager = new ArticleManager();
         $articles = $articleManager->getArticlesForMonitoring();
 
+        // On récupère la colonne et le sens du tri.
+        $sort = $_GET['sort'] ?? 'title';
+        $order = $_GET['order'] ?? 'asc';
+
+        // On définit les valeurs autorisées.
+        $allowedSorts = ['title', 'date', 'views'];
+        $allowedOrders = ['asc', 'desc'];
+
+        // On vérifie les paramètres reçus.
+        if (!in_array($sort, $allowedSorts, true)) {
+            $sort = 'title';
+        }
+
+        if (!in_array($order, $allowedOrders, true)) {
+            $order = 'asc';
+        }
+        // On trie les articles selon la colonne sélectionnée.
+        usort($articles, function($a, $b) use ($sort, $order) {
+            if ($sort === 'title') {
+                $result = strcmp($a->getTitle(), $b->getTitle());
+            } elseif ($sort === 'date') {
+                $result = $a->getDateCreation() <=> $b->getDateCreation();
+            } elseif ($sort === 'views') {
+                $result = $a->getNombreVues() <=> $b->getNombreVues();
+            }
+
+            return $order === 'asc' ? $result : -$result;
+        });
+
+        // On affiche la page de monitoring.
         $view = new View("Monitoring");
         $view->render("monitoring", 
         [ 
-            'articles' => $articles
+            'articles' => $articles,
+            'sort' => $sort,
+            'order' => $order
         ]);
     }
 }

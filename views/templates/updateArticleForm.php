@@ -23,3 +23,9 @@
     
 
 </script>
+
+<p>
+    <a class="submit" href="index.php?action=admin">
+         Retour à l'administration
+    </a>
+</p>
